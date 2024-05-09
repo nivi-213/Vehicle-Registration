@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { addTaskToServer } from "../Slice/taskslice";
+import { addTaskToServer,addTaskToList } from "../Slice/taskslice";
 import { useDispatch } from "react-redux";
 
 function AddTask() {
@@ -11,7 +11,7 @@ function AddTask() {
     e.preventDefault();
     console.log({ title, description });
 
-    dispatch(addTaskToServer({ title, description }));
+    dispatch(addTaskToList({ title, description }));
     setTitle("");
     setDescription("");
   };

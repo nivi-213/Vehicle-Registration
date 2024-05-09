@@ -3,8 +3,8 @@ import MyVerticalCenteredModal from "./UpdateTask";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 
-import { setSelectedTask, removeTaskFromList, getTasksFromServer ,deleteTaskFromServer} from "../Slice/taskslice";
-import { useEffect } from "react";
+import { setSelectedTask, removeTaskFromList ,} from "../Slice/taskslice";
+
 
 const TaskList = () => {
   const { taskList } = useSelector((state) => state.tasks);
@@ -18,24 +18,12 @@ const TaskList = () => {
     dispatch(setSelectedTask(task));
   };
 
-useEffect(() => {
- dispatch(getTasksFromServer())
-}, [dispatch])
 
 
-const deleteTask = (task) => {
-  console.log("delete task");
-  dispatch(deleteTaskFromServer(task))
-  .unwrap()
-  .then(() => {
-    dispatch(removeTaskFromList(task))
-  })
-};
-
-  // const deleteTask = (task) => {
-  //   dispatch(removeTaskFromList(task));
-  //   console.log("delete Task");
-  // };
+  const deleteTask = (task) => {
+    dispatch(removeTaskFromList(task));
+    console.log("delete Task");
+  };
   return (
     <div>
       <table className="mt-3 table table-striped table-bordered table-responsive">
