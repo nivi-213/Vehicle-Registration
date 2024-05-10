@@ -1,15 +1,17 @@
-import React, { useState } from "react";
-import MyVerticalCenteredModal from "./UpdateTask";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
-
-import { setSelectedTask, removeTaskFromList ,} from "../Slice/taskslice";
-
+import React, { useState, useEffect } from "react";
+import { Button } from "react-bootstrap";
+import Table from "react-bootstrap/Table";
+import MyVerticallyCenteredModal from "./UpdateTask";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  setSelectedTask,
+  removeTaskFromList,
+  getTasksFromServer,
+  deleteTaskFromServer,
+} from "../Slice/taskslice";
 
 const TaskList = () => {
-  const { taskList } = useSelector((state) => state.tasks);
-
-  const [modalShow, setModalShow] = useState(false);
+  const { tasksList } = useSelector((state) => state.tasks);
   const dispatch = useDispatch();
 
   const updateTask = (task) => {
@@ -18,55 +20,65 @@ const TaskList = () => {
     dispatch(setSelectedTask(task));
   };
 
-
+  useEffect(() => {
+    dispatch(getTasksFromServer());
+  }, [dispatch]);
 
   const deleteTask = (task) => {
-    dispatch(removeTaskFromList(task));
-    console.log("delete Task");
+    console.log("delete task");
+    dispatch(deleteTaskFromServer(task))
+      .unwrap()
+      .then(() => {
+        dispatch(removeTaskFromList(task));
+      });
   };
+
+  const [modalShow, setModalShow] = useState(false);
   return (
-    <div>
-      <table className="mt-3 table table-striped table-bordered table-responsive">
+    <>
+      <Table striped bordered hover>
         <thead>
           <tr className="text-center">
+            <th># S.No</th>
             <th>Title</th>
             <th>Description</th>
-            <th>Action</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {taskList &&
-            taskList.map((task, index) => {
+          {tasksList &&
+            tasksList.map((task, index) => {
               return (
-                <tr className="text-center " key={task.id}>
+                <tr className="text-center" key={task.id}>
                   <td>{index + 1}</td>
                   <td>{task.title}</td>
                   <td>{task.description}</td>
                   <td>
-                    <button
-                      className="btn btn-success"
+                    <Button
+                      variant="success"
+                      className="mx-3"
                       onClick={() => updateTask(task)}
                     >
                       <i className="bi bi-pencil-square"></i>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => deleteTask(task)}
-                      className="btn btn-danger ms-2"
-                    >
-                      <i className="bi bi-trash"></i>
-                    </button>
+                    </Button>
+                    <Button variant="danger">
+                      <i
+                        className="bi bi-trash3"
+                        onClick={() => deleteTask(task)}
+                      ></i>
+                    </Button>
                   </td>
                 </tr>
               );
             })}
         </tbody>
-      </table>
-      <MyVerticalCenteredModal
+      </Table>
+
+      <MyVerticallyCenteredModal
         show={modalShow}
         onHide={() => setModalShow(false)}
       />
-    </div>
+    </>
   );
 };
 

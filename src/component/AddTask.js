@@ -1,70 +1,61 @@
-import { useState } from "react";
-import { addTaskToServer,addTaskToList } from "../Slice/taskslice";
+import React, { useState } from "react";
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
+import { addTaskToServer } from "../Slice/taskslice";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import "./AddTask.css";
 
-function AddTask() {
+const AddTask = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const dispatch = useDispatch();
 
   const addTask = (e) => {
     e.preventDefault();
     console.log({ title, description });
-
-    dispatch(addTaskToList({ title, description }));
+    dispatch(addTaskToServer({ title, description }));
     setTitle("");
     setDescription("");
+    navigate("/task-list");
   };
 
   return (
-    <div className="container mt-5">
-      <div className="row justify-content-center">
-        <div className="col-md-12">
-          <div className="card">
-            <div className="card-body">
-              <h5 className="card-title text-center mb-4">Add Task</h5>
-              <form onSubmit={addTask}>
-                <div className="mb-3">
-                  <label htmlFor="title" className="form-label">
-                    Task Title
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="title"
-                    placeholder="Enter Task Title"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                  />
-                </div>
-                <div className="mb-3">
-                  <label htmlFor="description" className="form-label">
-                    Task Description
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="description"
-                    placeholder="Enter Task Description"
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                  />
-                </div>
-                <div className="d-grid justify-content-start w-50">
-                  <button
-                    type="submit"
-                    className="btn btn-primary btn-block  "
-                  >
-                    Add Task
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
+    <section className="my-5">
+      <Form className="container p-4 mx-auto">
+        <Form.Group className="text-center" controlId="formBasicEmail">
+          <Form.Label className="fw-bold">Task Title:</Form.Label>
+          <Form.Control
+            size="sm"
+            type="text"
+            className="w-50 mx-auto"
+            placeholder="Enter Task Title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+        </Form.Group>
+
+        <Form.Group className="text-center" controlId="formBasicPassword">
+          <Form.Label className="fw-bold">Task Description:</Form.Label>
+          <Form.Control
+            size="sm"
+            className="w-50 mx-auto mb-3"
+            type="text"
+            placeholder="Enter Task Description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
+        </Form.Group>
+
+        <div className="text-center">
+          <Button variant="primary" type="submit" onClick={addTask}>
+            Add Task
+          </Button>
         </div>
-      </div>
-    </div>
+      </Form>
+    </section>
   );
-}
+};
 
 export default AddTask;
