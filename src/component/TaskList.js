@@ -3,13 +3,8 @@ import { Button } from "react-bootstrap";
 import Table from "react-bootstrap/Table";
 import MyVerticallyCenteredModal from "./UpdateTask";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  setSelectedTask,
-  removeTaskFromList,
-  getTasksFromServer,
-  deleteTaskFromServer,
-} from "../Slice/taskslice";
-
+import { getTasksFromServer, deleteTaskFromServer } from "../Slice/taskThunk";
+import { removeTaskFromList, setSelectedTask } from "../Slice/taskslice";
 const TaskList = () => {
   const { tasksList } = useSelector((state) => state.tasks);
   const dispatch = useDispatch();
@@ -36,12 +31,17 @@ const TaskList = () => {
   const [modalShow, setModalShow] = useState(false);
   return (
     <>
-      <Table striped bordered hover>
+      <Table striped bordered hover className="mt-5 table-responsive table-striped container">
         <thead>
           <tr className="text-center">
             <th># S.No</th>
-            <th>Title</th>
-            <th>Description</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Date of Birth</th>
+            <th>Address</th>
+            <th>Gender</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -51,8 +51,13 @@ const TaskList = () => {
               return (
                 <tr className="text-center" key={task.id}>
                   <td>{index + 1}</td>
-                  <td>{task.title}</td>
-                  <td>{task.description}</td>
+                  <td>{task.name}</td>
+                  <td>{task.lastname}</td>
+                  <td>{task.email}</td>
+                  <td>{task.phone}</td>
+                  <td>{task.date}</td>
+                  <td>{task.address}</td>
+                  <td>{task.gender}</td>
                   <td>
                     <Button
                       variant="success"

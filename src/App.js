@@ -6,16 +6,19 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 // import { Row, Col } from "react-bootstrap";
 import TaskList from "./component/TaskList";
+import Home from "./component/Home";
 function App() {
   return (
     <Router>
-      <Container>
-        <Navbar />
+    
+      <Navbar />
+        {/* <Container> */}
         <Routes>
-          <Route path="/" element={<AddTask />} />
+        <Route path="/" element={<Home/>} />
+          <Route path="/home" element={<AddTask />} />
           <Route path="/task-list" element={<TaskList />} />
         </Routes>
-      </Container>
+      {/* </Container> */}
     </Router>
   );
 }

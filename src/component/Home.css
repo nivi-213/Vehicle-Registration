@@ -1,0 +1,25 @@
+.HomePage_section-header__BCY60{
+    font-size: 34px;
+    color: #064d98;
+    font-weight: 700;
+}
+.HomePage_section-subheader__pRId_{
+    margin: 0 auto;
+    max-width: 360px;
+    height: 25px;
+    font-size: 18px;
+    background-color: #064d98;
+    color: #fff;
+    border-radius: 18px;
+}
+p{
+    font-size: larger;
+    font-weight: 1em ;
+    font-family: 'Times New Roman', Times, serif;
+}
+.footer {
+    background-color: #333;
+    color: white;
+    padding: 20px;
+  }
+  
