@@ -12,8 +12,8 @@ function Home() {
           Is How We Compare Insurance Policies
         </h2>
       </section>
-      <section className="d-flex justify-content-evenly vehing flex-wrap d-md-flex flex-wrap"> {/* Add flex-wrap here */}
-        <div className="col-md-4 col-lg-3"> {/* Adjusted column size for medium screen */}
+      <section className="d-flex justify-content-evenly vehing flex-wrap d-md-flex flex-wrap">
+        <div className="col-md-4 col-lg-3">
           <img
             src="Car-With-Banner.gif"
             alt="Car With Banner"
@@ -23,7 +23,7 @@ function Home() {
           />
           <p className="text-center mt-3">4 Wheeler</p>
         </div>
-        <div className="col-md-4 col-lg-3"> {/* Adjusted column size for medium screen */}
+        <div className="col-md-4 col-lg-3">
           <img
             src="Bike-With-Banner.gif"
             alt="Bike With Banner"
@@ -33,7 +33,7 @@ function Home() {
           />
           <p className="text-center mt-3">2 Wheeler</p>
         </div>
-        <div className=" d-none col-md-4 col-lg-3"> {/* Adjusted column size for medium screen */}
+        <div className=" d-none col-md-4 col-lg-3">
           <img
             src="Truck-With-Banner.gif"
             alt="Truck With Banner"

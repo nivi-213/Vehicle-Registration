@@ -236,8 +236,7 @@ const MyVerticalCenteredModal = () => {
                 isInvalid={!!formErrors.modal}
               >
                 <option value="">Select Modal</option>{" "}
-                {/* Add the optional selection */}
-                {/* Add other options dynamically if needed */}
+              
                 <option value="Yamaha"> Yamaha</option>
                 <option value=" Royal Enfield">Royal Enfield </option>
                 <option value="Suzuki ">Suzuki </option>
@@ -367,7 +366,7 @@ const MyVerticalCenteredModal = () => {
           </div>
         </div>
         <div className="text-center mt-4">
-          {/* Conditionally render the spinner if isLoading is true */}
+        
           {isLoading ? (
             <Spinner animation="border" role="status">
               <span className="sr-only">...</span>
