@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import { addTaskToServer } from "../Slice/taskThunk";
+import Spinner from "react-bootstrap/Spinner";
 import { useDispatch } from "react-redux";
-import Spinner from 'react-bootstrap/Spinner';
+import { addTaskToServer } from "../Slice/taskThunk";
 import { useNavigate } from "react-router-dom";
 import "./AddTask.css";
 
@@ -11,87 +11,203 @@ const AddTask = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-  // State variables
   const [name, setName] = useState("");
-  const [lastname, setLastname] = useState("");
-  const [gender, setGender] = useState("");
-  const [email, setEmail] = useState("");
+  const [modal, setModal] = useState("");
+  const [color, setColor] = useState("");
+  const [vin, setVin] = useState("");
   const [phone, setPhone] = useState("");
-  const [date, setDate] = useState("");
+  const [year, setYear] = useState("");
   const [address, setAddress] = useState("");
   const [formErrors, setFormErrors] = useState({});
 
-  // Function to add task
+
+  // Function to reset form errors
+  const resetFormErrors = () => {
+    setFormErrors({});
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    switch (name) {
+      case "firstName":
+        setName(value);
+        if (!value.trim()) {
+          setFormErrors((prevErrors) => ({
+            ...prevErrors,
+            name: "Please enter your first name.",
+          }));
+        } else {
+          setFormErrors((prevErrors) => ({
+            ...prevErrors,
+            name: "",
+          }));
+        }
+        break;
+      case "modal":
+        setModal(value);
+        if (!value.trim()) {
+          setFormErrors((prevErrors) => ({
+            ...prevErrors,
+            modal: "Please enter your modal.",
+          }));
+        } else {
+          setFormErrors((prevErrors) => ({
+            ...prevErrors,
+            modal: "",
+          }));
+        }
+        break;
+      case "vin":
+        setVin(value);
+        if (!value.trim()) {
+          setFormErrors((prevErrors) => ({
+            ...prevErrors,
+            vin: "Please enter your vehicle identification number.",
+          }));
+        } else {
+          setFormErrors((prevErrors) => ({
+            ...prevErrors,
+            vin: "",
+          }));
+        }
+        break;
+      case "phone":
+        const phoneRegex = /^(?!(0{10}))[0-9]{10}$/;
+        const isValidPhone = phoneRegex.test(value);
+        setPhone(value);
+        setFormErrors((prevErrors) => ({
+          ...prevErrors,
+          phone: isValidPhone
+            ? ""
+            : "Please enter a valid 10-digit phone number.",
+        }));
+        break;
+      case "year":
+        setYear(value);
+        if (!value.trim()) {
+          setFormErrors((prevErrors) => ({
+            ...prevErrors,
+            year: "Please enter your year .",
+          }));
+        } else {
+          setFormErrors((prevErrors) => ({
+            ...prevErrors,
+            year: "",
+          }));
+        }
+        break;
+      case "address":
+        setAddress(value);
+        if (!value.trim()) {
+          setFormErrors((prevErrors) => ({
+            ...prevErrors,
+            address: "Please enter your address.",
+          }));
+        } else {
+          setFormErrors((prevErrors) => ({
+            ...prevErrors,
+            address: "",
+          }));
+        }
+        break;
+      case "color":
+        setColor(value);
+        if (!value.trim()) {
+          setFormErrors((prevErrors) => ({
+            ...prevErrors,
+            color,
+          }));
+        } else {
+          setFormErrors((prevErrors) => ({
+            ...prevErrors,
+            color: "",
+          }));
+        }
+        break;
+      default:
+        break;
+    }
+  };
+
   const addTask = async (e) => {
     e.preventDefault();
-    setIsLoading(true); 
-    // Basic form validation
+    setIsLoading(true);
     const errors = {};
+    
     if (!name.trim()) {
       errors.name = "Please enter your first name.";
     }
-    if (!lastname.trim()) {
-      errors.lastname = "Please enter your last name.";
+    if (!modal.trim()) {
+      errors.modal = "Please enter your modal.";
     }
-    if (!email.trim()) {
-      errors.email = "Please enter your email.";
-    } else if (!/\S+@\S+\.\S+/.test(email)) {
-      errors.email = "Please enter a valid email address.";
+    if (!vin.trim()) {
+      errors.vin = "Please enter your vehicle identification number.";
     }
     if (!phone.trim()) {
       errors.phone = "Please enter your phone number.";
     }
-    if (!date.trim()) {
-      errors.date = "Please enter your date of birth.";
+    if (!year.trim()) {
+      errors.year = "Please enter your year.";
     }
     if (!address.trim()) {
       errors.address = "Please enter your address.";
     }
-    if (!gender) {
-      errors.gender = "Please select your gender.";
+    if (!color) {
+      errors.color = "Please select your color.";
     }
 
     if (Object.keys(errors).length > 0) {
       setFormErrors(errors);
-      setIsLoading(false); // Set isLoading to false here if there are errors
+      setIsLoading(false);
       return;
     }
 
     try {
-      // If no errors, dispatch the action and navigate
-      await dispatch(addTaskToServer({ name, lastname, email, phone, date, address, gender }));
-      // Clear form fields after submission
+      await dispatch(
+        addTaskToServer({ name, modal, vin, phone, year, address, color })
+      );
+      // Clear form fields after successful submission
       setName("");
-      setLastname("");
-      setEmail("");
+      setModal("");
+      setVin("");
       setPhone("");
-      setDate("");
+      setYear("");
       setAddress("");
-      setGender("");
-      // Clear form errors
-      setFormErrors({});
-      // Navigate to task list page
+      setColor("");
+      resetFormErrors(); // Reset form errors
+      setIsLoading(false);
       navigate("/task-list");
     } catch (error) {
       console.error("Error adding task:", error);
-      setIsLoading(false); // Set isLoading to false if there's an error
+      setIsLoading(false);
     }
+  
+  
   };
-
+  const years = [];
+    const currentYear = new Date().getFullYear();
+    for (let i = currentYear; i >= currentYear - 100; i--) {
+      years.push(i);
+    }
   return (
     <section className="my-5 mt-5">
+       <h1 className="text-center ">Form Vehicle </h1>
       <Form className="container p-4 mx-auto">
         <div className="row">
           <div className="col-md-6">
             <Form.Group className="mb-3" controlId="formFirstName">
-              <Form.Label className="fw-bold">First Name:</Form.Label>
+              <Form.Label className="fw-bold">
+                First Name<span className="text-danger">*:</span>
+              </Form.Label>
               <Form.Control
                 size="sm"
                 type="text"
                 placeholder="Enter First Name"
                 value={name}
                 className="p-3"
-                onChange={(e) => setName(e.target.value)}
+                onChange={handleChange}
+                name="firstName"
                 isInvalid={!!formErrors.name}
               />
               <Form.Control.Feedback type="invalid">
@@ -100,19 +216,28 @@ const AddTask = () => {
             </Form.Group>
           </div>
           <div className="col-md-6">
-            <Form.Group className="mb-3" controlId="formLastName">
-              <Form.Label className="fw-bold">Last Name:</Form.Label>
+            <Form.Group className="mb-3" controlId="formModal">
+              <Form.Label className="fw-bold">
+                Vehicle make<span className="text-danger">*:</span>
+              </Form.Label>
               <Form.Control
                 size="sm"
-                type="text"
-                placeholder="Enter Last Name"
-                value={lastname}
+                as="select"
+                value={modal}
                 className="p-3"
-                onChange={(e) => setLastname(e.target.value)}
-                isInvalid={!!formErrors.lastname}
-              />
+                onChange={handleChange}
+                name="modal"
+                isInvalid={!!formErrors.modal}
+              >
+                <option value="">Select Modal</option>{" "}
+                {/* Add the optional selection */}
+                {/* Add other options dynamically if needed */}
+                <option value="Yamaha"> Yamaha</option>
+                <option value=" Royal Enfield">Royal Enfield </option>
+                <option value="Suzuki ">Suzuki </option>
+              </Form.Control>
               <Form.Control.Feedback type="invalid">
-                {formErrors.lastname}
+                {formErrors.modal}
               </Form.Control.Feedback>
             </Form.Group>
           </div>
@@ -120,50 +245,67 @@ const AddTask = () => {
         <div className="row">
           <div className="col-md-6">
             <Form.Group className="mb-3" controlId="formEmail">
-              <Form.Label className="fw-bold">Email:</Form.Label>
+              <Form.Label className="fw-bold">
+                Vehicle Identification Number
+                <span className="text-danger">*:</span>
+              </Form.Label>
               <Form.Control
                 size="sm"
-                type="email"
-                placeholder="Enter Email"
-                value={email}
+                type="text"
+                placeholder="Enter Identification Number"
+                value={vin}
                 className="p-3"
-                onChange={(e) => setEmail(e.target.value)}
-                isInvalid={!!formErrors.email}
+                onChange={handleChange}
+                name="vin"
+                isInvalid={!!formErrors.vin}
               />
               <Form.Control.Feedback type="invalid">
-                {formErrors.email}
+                {formErrors.vin}
               </Form.Control.Feedback>
             </Form.Group>
           </div>
           <div className="col-md-6">
-            <Form.Group className="mb-3" controlId="formDateOfBirth">
-              <Form.Label className="fw-bold">Date of Birth:</Form.Label>
-              <Form.Control
-                size="sm"
-                type="date"
-                placeholder="Enter Date of Birth"
-                className="p-3"
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
-                isInvalid={!!formErrors.date}
-              />
-              <Form.Control.Feedback type="invalid">
-                {formErrors.date}
-              </Form.Control.Feedback>
-            </Form.Group>
+          <Form.Group className="mb-3" controlId="formYear">
+          <Form.Label className="fw-bold">
+            Year<span className="text-danger">*</span>:
+          </Form.Label>
+          <Form.Control
+            as="select"
+            size="sm"
+            className="p-3"
+            value={year}
+            onChange={handleChange}
+            name="year"
+            isInvalid={!!formErrors.year}
+          >
+            <option value="">Select Year</option>
+            {years.map((year) => (
+              <option key={year} value={year}>
+                {year}
+              </option>
+            ))}
+          </Form.Control>
+          <Form.Control.Feedback type="invalid">
+            {formErrors.year}
+          </Form.Control.Feedback>
+        </Form.Group>
+
           </div>
         </div>
         <div className="row">
           <div className="col-md-6">
             <Form.Group className="mb-3" controlId="formPhone">
-              <Form.Label className="fw-bold">Phone Number:</Form.Label>
+              <Form.Label className="fw-bold">
+                Phone Number<span className="text-danger">*:</span>
+              </Form.Label>
               <Form.Control
                 size="sm"
                 type="tel"
                 className="p-3"
                 placeholder="Enter Phone Number"
                 value={phone}
-                onChange={(e) => setPhone(e.target.value)}
+                onChange={handleChange}
+                name="phone"
                 isInvalid={!!formErrors.phone}
               />
               <Form.Control.Feedback type="invalid">
@@ -172,23 +314,26 @@ const AddTask = () => {
             </Form.Group>
           </div>
           <div className="col-md-6">
-            <Form.Group className="mb-3" controlId="formGender">
-              <Form.Label className="fw-bold">Gender:</Form.Label>
+            <Form.Group className="mb-3" controlId="formColor">
+              <Form.Label className="fw-bold">
+                Color<span className="text-danger">*:</span>
+              </Form.Label>
               <Form.Control
                 as="select"
                 size="sm"
-                value={gender}
+                value={color}
                 className="p-3"
-                onChange={(e) => setGender(e.target.value)}
-                isInvalid={!!formErrors.gender}
+                onChange={handleChange}
+                name="color"
+                isInvalid={!!formErrors.color}
               >
-                <option value="">Select Gender</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Other">Other</option>
+                <option value="">Select Color</option>
+                <option value="Black">Black</option>
+                <option value="Gray">Gray</option>
+                <option value="Other">other</option>
               </Form.Control>
               <Form.Control.Feedback type="invalid">
-                {formErrors.gender}
+                {formErrors.color}
               </Form.Control.Feedback>
             </Form.Group>
           </div>
@@ -196,14 +341,17 @@ const AddTask = () => {
         <div className="row">
           <div className="col-md-6">
             <Form.Group className="mb-3" controlId="formAddress">
-              <Form.Label className="fw-bold">Address:</Form.Label>
+              <Form.Label className="fw-bold">
+                Address<span className="text-danger">*:</span>
+              </Form.Label>
               <Form.Control
                 as="textarea"
                 rows={3}
-                placeholder="Enter Address"
+                placeholder=" Enter CityVillagePincode"
                 value={address}
                 className="p-3"
-                onChange={(e) => setAddress(e.target.value)}
+                onChange={handleChange}
+                name="address"
                 isInvalid={!!formErrors.address}
               />
               <Form.Control.Feedback type="invalid">
@@ -216,7 +364,7 @@ const AddTask = () => {
           {/* Conditionally render the spinner if isLoading is true */}
           {isLoading ? (
             <Spinner animation="border" role="status">
-              <span className="sr-only">Loading...</span>
+              <span className="sr-only">...</span>
             </Spinner>
           ) : (
             // Render the submit button if not loading

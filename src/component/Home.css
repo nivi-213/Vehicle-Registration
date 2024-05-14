@@ -16,10 +16,21 @@ p{
     font-size: larger;
     font-weight: 1em ;
     font-family: 'Times New Roman', Times, serif;
+    text-align: center;
+    padding: 10px;
 }
 .footer {
     background-color: #333;
     color: white;
-    padding: 20px;
+    padding: 30px;
+  }
+
+
+
+  @media (max-width: 768px) {
+    .vehing{
+        display: flex;
+        flex-wrap: wrap;
+    }
   }
   
