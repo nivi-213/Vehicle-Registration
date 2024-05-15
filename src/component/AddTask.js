@@ -20,7 +20,6 @@ const AddTask = () => {
   const [address, setAddress] = useState("");
   const [formErrors, setFormErrors] = useState({});
 
-
   // Function to reset form errors
   const resetFormErrors = () => {
     setFormErrors({});
@@ -134,7 +133,7 @@ const AddTask = () => {
     e.preventDefault();
     setIsLoading(true);
     const errors = {};
-    
+
     if (!name.trim()) {
       errors.name = "Please enter your first name.";
     }
@@ -182,23 +181,21 @@ const AddTask = () => {
       console.error("Error adding task:", error);
       setIsLoading(false);
     }
-  
-  
   };
   const years = [];
-    const currentYear = new Date().getFullYear();
-    for (let i = currentYear; i >= currentYear - 100; i--) {
-      years.push(i);
-    }
+  const currentYear = new Date().getFullYear();
+  for (let i = currentYear; i >= currentYear - 100; i--) {
+    years.push(i);
+  }
   return (
     <section className="my-5 mt-5">
-       <h1 className="text-center ">Form Vehicle </h1>
+      <h1 className="text-center ">Form Vehicle </h1>
       <Form className="container p-4 mx-auto">
         <div className="row">
           <div className="col-md-6">
             <Form.Group className="mb-3" controlId="formFirstName">
               <Form.Label className="fw-bold">
-                First Name<span className="text-danger">*:</span>
+                Customer Name<span className="text-danger">*:</span>
               </Form.Label>
               <Form.Control
                 size="sm"
@@ -218,7 +215,7 @@ const AddTask = () => {
           <div className="col-md-6">
             <Form.Group className="mb-3" controlId="formModal">
               <Form.Label className="fw-bold">
-                Vehicle make<span className="text-danger">*:</span>
+                Vehicle Modal<span className="text-danger">*:</span>
               </Form.Label>
               <Form.Control
                 size="sm"
@@ -265,31 +262,30 @@ const AddTask = () => {
             </Form.Group>
           </div>
           <div className="col-md-6">
-          <Form.Group className="mb-3" controlId="formYear">
-          <Form.Label className="fw-bold">
-            Year<span className="text-danger">*</span>:
-          </Form.Label>
-          <Form.Control
-            as="select"
-            size="sm"
-            className="p-3"
-            value={year}
-            onChange={handleChange}
-            name="year"
-            isInvalid={!!formErrors.year}
-          >
-            <option value="">Select Year</option>
-            {years.map((year) => (
-              <option key={year} value={year}>
-                {year}
-              </option>
-            ))}
-          </Form.Control>
-          <Form.Control.Feedback type="invalid">
-            {formErrors.year}
-          </Form.Control.Feedback>
-        </Form.Group>
-
+            <Form.Group className="mb-3" controlId="formYear">
+              <Form.Label className="fw-bold">
+                Year<span className="text-danger">*</span>:
+              </Form.Label>
+              <Form.Control
+                as="select"
+                size="sm"
+                className="p-3"
+                value={year}
+                onChange={handleChange}
+                name="year"
+                isInvalid={!!formErrors.year}
+              >
+                <option value="">Select Year</option>
+                {years.map((year) => (
+                  <option key={year} value={year}>
+                    {year}
+                  </option>
+                ))}
+              </Form.Control>
+              <Form.Control.Feedback type="invalid">
+                {formErrors.year}
+              </Form.Control.Feedback>
+            </Form.Group>
           </div>
         </div>
         <div className="row">

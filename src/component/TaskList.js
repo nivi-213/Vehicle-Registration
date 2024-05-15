@@ -75,7 +75,7 @@ const TaskList = () => {
           <thead>
             <tr className="text-center">
               <th># S.No</th>
-              <th>First Name</th>
+              <th>Customer Name</th>
               <th>Vehicle Modal</th>
               <th>Vehicle Identification Number</th>
               <th>Phone</th>
