@@ -18,6 +18,7 @@ const AddTask = () => {
   const [phone, setPhone] = useState("");
   const [year, setYear] = useState("");
   const [address, setAddress] = useState("");
+  const [millage, setMillage] = useState("");
   const [formErrors, setFormErrors] = useState({});
 
   // Function to reset form errors
@@ -31,45 +32,26 @@ const AddTask = () => {
     switch (name) {
       case "firstName":
         setName(value);
-        if (!value.trim()) {
-          setFormErrors((prevErrors) => ({
-            ...prevErrors,
-            name: "Please enter your first name.",
-          }));
-        } else {
-          setFormErrors((prevErrors) => ({
-            ...prevErrors,
-            name: "",
-          }));
-        }
+        setFormErrors((prevErrors) => ({
+          ...prevErrors,
+          name: value.trim() ? "" : "Please enter your first name.",
+        }));
         break;
       case "modal":
         setModal(value);
-        if (!value.trim()) {
-          setFormErrors((prevErrors) => ({
-            ...prevErrors,
-            modal: "Please enter your modal.",
-          }));
-        } else {
-          setFormErrors((prevErrors) => ({
-            ...prevErrors,
-            modal: "",
-          }));
-        }
+        setFormErrors((prevErrors) => ({
+          ...prevErrors,
+          modal: value.trim() ? "" : "Please enter your modal.",
+        }));
         break;
       case "vin":
         setVin(value);
-        if (!value.trim()) {
-          setFormErrors((prevErrors) => ({
-            ...prevErrors,
-            vin: "Please enter your vehicle identification number.",
-          }));
-        } else {
-          setFormErrors((prevErrors) => ({
-            ...prevErrors,
-            vin: "",
-          }));
-        }
+        setFormErrors((prevErrors) => ({
+          ...prevErrors,
+          vin: value.trim()
+            ? ""
+            : "Please enter your vehicle identification number.",
+        }));
         break;
       case "phone":
         const phoneRegex = /^(?!(0{10}))[0-9]{10}$/;
@@ -84,45 +66,31 @@ const AddTask = () => {
         break;
       case "year":
         setYear(value);
-        if (!value.trim()) {
-          setFormErrors((prevErrors) => ({
-            ...prevErrors,
-            year: "Please enter your year .",
-          }));
-        } else {
-          setFormErrors((prevErrors) => ({
-            ...prevErrors,
-            year: "",
-          }));
-        }
+        setFormErrors((prevErrors) => ({
+          ...prevErrors,
+          year: value.trim() ? "" : "Please enter your year.",
+        }));
         break;
       case "address":
         setAddress(value);
-        if (!value.trim()) {
-          setFormErrors((prevErrors) => ({
-            ...prevErrors,
-            address: "Please enter your address.",
-          }));
-        } else {
-          setFormErrors((prevErrors) => ({
-            ...prevErrors,
-            address: "",
-          }));
-        }
+        setFormErrors((prevErrors) => ({
+          ...prevErrors,
+          address: value.trim() ? "" : "Please enter your address.",
+        }));
         break;
       case "color":
         setColor(value);
-        if (!value.trim()) {
-          setFormErrors((prevErrors) => ({
-            ...prevErrors,
-            color,
-          }));
-        } else {
-          setFormErrors((prevErrors) => ({
-            ...prevErrors,
-            color: "",
-          }));
-        }
+        setFormErrors((prevErrors) => ({
+          ...prevErrors,
+          color: value.trim() ? "" : "Please select your color.",
+        }));
+        break;
+      case "millage":
+        setMillage(value);
+        setFormErrors((prevErrors) => ({
+          ...prevErrors,
+          millage: value.trim() ? "" : "Please enter current millage.",
+        }));
         break;
       default:
         break;
@@ -155,6 +123,9 @@ const AddTask = () => {
     if (!color) {
       errors.color = "Please select your color.";
     }
+    if (!millage.trim()) {
+      errors.millage = "Please enter current millage.";
+    }
 
     if (Object.keys(errors).length > 0) {
       setFormErrors(errors);
@@ -164,9 +135,18 @@ const AddTask = () => {
 
     try {
       await dispatch(
-        addTaskToServer({ name, modal, vin, phone, year, address, color })
+        addTaskToServer({
+          name,
+          modal,
+          vin,
+          phone,
+          year,
+          address,
+          color,
+          millage,
+        })
       );
-      // Clear form fields after successful submission
+
       setName("");
       setModal("");
       setVin("");
@@ -174,7 +154,8 @@ const AddTask = () => {
       setYear("");
       setAddress("");
       setColor("");
-      resetFormErrors(); // Reset form errors
+      setMillage("");
+      resetFormErrors();
       setIsLoading(false);
       navigate("/task-list");
     } catch (error) {
@@ -182,195 +163,255 @@ const AddTask = () => {
       setIsLoading(false);
     }
   };
+
   const years = [];
   const currentYear = new Date().getFullYear();
   for (let i = currentYear; i >= currentYear - 100; i--) {
     years.push(i);
   }
+
   return (
-    <section className="my-5 mt-5">
-      <h1 className="text-center ">Form Vehicle </h1>
-      <Form className="container p-4 mx-auto">
-        <div className="row">
-          <div className="col-md-6">
-            <Form.Group className="mb-3" controlId="formFirstName">
-              <Form.Label className="fw-bold">
-                Customer Name<span className="text-danger">*:</span>
-              </Form.Label>
-              <Form.Control
-                size="sm"
-                type="text"
-                placeholder="Enter First Name"
-                value={name}
-                className="p-3"
-                onChange={handleChange}
-                name="firstName"
-                isInvalid={!!formErrors.name}
+    <div className="scroll-container">
+      <div className="background-image">
+        <div className="card-container">
+          <section className=" ">
+            <div class="header-logo">
+              <img
+                src="https://www.jotform.com/uploads/ugurg/form_files/Post3.65b1272ac4b291.79834324.png"
+                alt="Vehicle Registration Form"
+                width="752"
+                className="header-logo-top"
               />
-              <Form.Control.Feedback type="invalid">
-                {formErrors.name}
-              </Form.Control.Feedback>
-            </Form.Group>
-          </div>
-          <div className="col-md-6">
-            <Form.Group className="mb-3" controlId="formModal">
-              <Form.Label className="fw-bold">
-                Vehicle Modal<span className="text-danger">*:</span>
-              </Form.Label>
-              <Form.Control
-                size="sm"
-                as="select"
-                value={modal}
-                className="p-3"
-                onChange={handleChange}
-                name="modal"
-                isInvalid={!!formErrors.modal}
-              >
-                <option value="">Select Modal</option>{" "}
-                {/* Add the optional selection */}
-                {/* Add other options dynamically if needed */}
-                <option value="Yamaha"> Yamaha</option>
-                <option value=" Royal Enfield">Royal Enfield </option>
-                <option value="Suzuki ">Suzuki </option>
-              </Form.Control>
-              <Form.Control.Feedback type="invalid">
-                {formErrors.modal}
-              </Form.Control.Feedback>
-            </Form.Group>
-          </div>
+            </div>
+            <div class="header-text httal htvam">
+              <h1 id="header_1" className="form-header">
+                Vehicle Registration Form
+              </h1>
+            </div>
+
+            <Form className="container p-3 mx-auto">
+              <div className="row">
+                <div className="col-md-6">
+                  <Form.Group className="mb-3" controlId="formFirstName">
+                    <Form.Label className="fw-bold">Customer Name</Form.Label>
+
+                    <Form.Control
+                      size="sm"
+                      type="text"
+                      value={name}
+                      className="p-2"
+                      onChange={handleChange}
+                      name="firstName"
+                      isInvalid={!!formErrors.name}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {formErrors.name}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                </div>
+                <div className="col-md-6">
+                  <Form.Group className="mb-3" controlId="formModal">
+                    <Form.Label className="fw-bold">
+                      Vehicle Modal
+                      <span className="text-danger">*</span>
+                    </Form.Label>
+
+                    <Form.Control
+                      size="sm"
+                      placeholder="e.g.,2001"
+                      value={modal}
+                      className="p-2"
+                      onChange={handleChange}
+                      name="modal"
+                      isInvalid={!!formErrors.modal}
+                    />
+
+                    <Form.Control.Feedback type="invalid">
+                      {formErrors.modal}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col-md-6">
+                  <Form.Group className="mb-3" controlId="formEmail">
+                    <Form.Label className="fw-bold">
+                      {/* <FontAwesomeIcon icon={faKey} style={{ color: "green" }} />{" "} */}
+                      Vehicle Identification Number
+                      <span className="text-danger">*</span>
+                    </Form.Label>
+                    <Form.Control
+                      size="sm"
+                      type="text"
+                      placeholder="e.g.,2323"
+                      value={vin}
+                      className="p-2"
+                      onChange={handleChange}
+                      name="vin"
+                      isInvalid={!!formErrors.vin}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {formErrors.vin}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                </div>
+                <div className="col-md-6">
+                  <Form.Group className="mb-3" controlId="formYear">
+                    <Form.Label className="fw-bold">
+                      {/* <FontAwesomeIcon
+                      icon={faCalendarAlt}
+                      style={{ color: "purple" }}
+                    />{" "} */}
+                      Year
+                      <span className="text-danger">*</span>
+                    </Form.Label>
+
+                    <Form.Control
+                      as="select"
+                      size="sm"
+                      className="p-2"
+                      value={year}
+                      onChange={handleChange}
+                      name="year"
+                      isInvalid={!!formErrors.year}
+                    >
+                      <option value="">Please Select </option>
+                      {years.map((year) => (
+                        <option key={year} value={year}>
+                          {year}
+                        </option>
+                      ))}
+                    </Form.Control>
+                    <Form.Control.Feedback type="invalid">
+                      {formErrors.year}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col-md-6">
+                  <Form.Group className="mb-3" controlId="formPhone">
+                    <Form.Label className="fw-bold">
+                      {/* <FontAwesomeIcon
+                      icon={faPhone}
+                      style={{ color: "green" }}
+                    />{" "} */}
+                      Phone Number
+                      <span className="text-danger">*</span>
+                    </Form.Label>
+
+                    <Form.Control
+                      size="sm"
+                      type="tel"
+                      className="p-2"
+                      placeholder="(000)000-000"
+                      value={phone}
+                      onChange={handleChange}
+                      name="phone"
+                      isInvalid={!!formErrors.phone}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {formErrors.phone}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                </div>
+                <div className="col-md-6">
+                  <Form.Group className="mb-3" controlId="formColor">
+                    <Form.Label className="fw-bold">
+                      {/* <FontAwesomeIcon
+                      icon={faPalette}
+                      style={{ color: "blue" }}
+                    />{" "} */}
+                      Color
+                      {/* <span className="text-danger">*</span> */}
+                    </Form.Label>
+                    <Form.Control
+                      as="select"
+                      size="sm"
+                      value={color}
+                      className="p-2"
+                      onChange={handleChange}
+                      name="color"
+                      isInvalid={!!formErrors.color}
+                    >
+                      <option value="">Select Color</option>
+                      <option value="Black">Black</option>
+                      <option value="Gray">Gray</option>
+                      <option value="Other">other</option>
+                    </Form.Control>
+                    <Form.Control.Feedback type="invalid">
+                      {formErrors.color}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col-md-6">
+                  <Form.Group className="mb-3" controlId="formAddress">
+                    <Form.Label className="fw-bold">
+                      {/* <FontAwesomeIcon
+                      icon={faMapMarkerAlt}
+                      style={{ color: "red" }}
+                    />{" "} */}
+                      Address
+                      <span className="text-danger">*</span>
+                    </Form.Label>
+
+                    <Form.Control
+                      as="textarea"
+                      rows={3}
+                      placeholder=""
+                      value={address}
+                      className="p-2"
+                      onChange={handleChange}
+                      name="address"
+                      isInvalid={!!formErrors.address}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {formErrors.address}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                </div>
+                <div className="col-md-6">
+                  <Form.Group className="mb-3" controlId="formMillage">
+                    <Form.Label className="fw-bold">
+                      Current Millage
+                      <span className="text-danger">*</span>
+                    </Form.Label>
+                    <Form.Control
+                      size="sm"
+                      type="number" // Changed input type to "number"
+                      className="p-2"
+                      placeholder="e.g., 50000"
+                      value={millage}
+                      onChange={handleChange}
+                      name="millage"
+                      isInvalid={!!formErrors.millage}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {formErrors.millage}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                </div>
+              </div>
+              <div className="text-center mt-4">
+                {/* Conditionally render the spinner if isLoading is true */}
+                {isLoading ? (
+                  <Spinner animation="border" role="status">
+                    <span className="sr-only"></span>
+                  </Spinner>
+                ) : (
+                  // Render the submit button if not loading
+                  <Button variant="primary" type="submit" onClick={addTask}>
+                    Add Task
+                  </Button>
+                )}
+              </div>
+            </Form>
+          </section>
         </div>
-        <div className="row">
-          <div className="col-md-6">
-            <Form.Group className="mb-3" controlId="formEmail">
-              <Form.Label className="fw-bold">
-                Vehicle Identification Number
-                <span className="text-danger">*:</span>
-              </Form.Label>
-              <Form.Control
-                size="sm"
-                type="text"
-                placeholder="Enter Identification Number"
-                value={vin}
-                className="p-3"
-                onChange={handleChange}
-                name="vin"
-                isInvalid={!!formErrors.vin}
-              />
-              <Form.Control.Feedback type="invalid">
-                {formErrors.vin}
-              </Form.Control.Feedback>
-            </Form.Group>
-          </div>
-          <div className="col-md-6">
-            <Form.Group className="mb-3" controlId="formYear">
-              <Form.Label className="fw-bold">
-                Year<span className="text-danger">*</span>:
-              </Form.Label>
-              <Form.Control
-                as="select"
-                size="sm"
-                className="p-3"
-                value={year}
-                onChange={handleChange}
-                name="year"
-                isInvalid={!!formErrors.year}
-              >
-                <option value="">Select Year</option>
-                {years.map((year) => (
-                  <option key={year} value={year}>
-                    {year}
-                  </option>
-                ))}
-              </Form.Control>
-              <Form.Control.Feedback type="invalid">
-                {formErrors.year}
-              </Form.Control.Feedback>
-            </Form.Group>
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-md-6">
-            <Form.Group className="mb-3" controlId="formPhone">
-              <Form.Label className="fw-bold">
-                Phone Number<span className="text-danger">*:</span>
-              </Form.Label>
-              <Form.Control
-                size="sm"
-                type="tel"
-                className="p-3"
-                placeholder="Enter Phone Number"
-                value={phone}
-                onChange={handleChange}
-                name="phone"
-                isInvalid={!!formErrors.phone}
-              />
-              <Form.Control.Feedback type="invalid">
-                {formErrors.phone}
-              </Form.Control.Feedback>
-            </Form.Group>
-          </div>
-          <div className="col-md-6">
-            <Form.Group className="mb-3" controlId="formColor">
-              <Form.Label className="fw-bold">
-                Color<span className="text-danger">*:</span>
-              </Form.Label>
-              <Form.Control
-                as="select"
-                size="sm"
-                value={color}
-                className="p-3"
-                onChange={handleChange}
-                name="color"
-                isInvalid={!!formErrors.color}
-              >
-                <option value="">Select Color</option>
-                <option value="Black">Black</option>
-                <option value="Gray">Gray</option>
-                <option value="Other">other</option>
-              </Form.Control>
-              <Form.Control.Feedback type="invalid">
-                {formErrors.color}
-              </Form.Control.Feedback>
-            </Form.Group>
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-md-6">
-            <Form.Group className="mb-3" controlId="formAddress">
-              <Form.Label className="fw-bold">
-                Address<span className="text-danger">*:</span>
-              </Form.Label>
-              <Form.Control
-                as="textarea"
-                rows={3}
-                placeholder=" Enter CityVillagePincode"
-                value={address}
-                className="p-3"
-                onChange={handleChange}
-                name="address"
-                isInvalid={!!formErrors.address}
-              />
-              <Form.Control.Feedback type="invalid">
-                {formErrors.address}
-              </Form.Control.Feedback>
-            </Form.Group>
-          </div>
-        </div>
-        <div className="text-center mt-4">
-          {/* Conditionally render the spinner if isLoading is true */}
-          {isLoading ? (
-            <Spinner animation="border" role="status">
-              <span className="sr-only">...</span>
-            </Spinner>
-          ) : (
-            // Render the submit button if not loading
-            <Button variant="primary" type="submit" onClick={addTask}>
-              Add Task
-            </Button>
-          )}
-        </div>
-      </Form>
-    </section>
+      </div>
+    </div>
   );
 };
 

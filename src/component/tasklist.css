@@ -1,0 +1,21 @@
+body{
+    overflow-y: hidden; 
+  }
+  .scroll-container {
+    height: calc(100vh - 56px); 
+    overflow-y: auto;
+}
+
+
+.scroll-container::-webkit-scrollbar {
+    width: 0; 
+}
+
+
+thead tr th{
+ 
+    color: rgba(21, 22, 23, 0.62);
+    font-weight: 700;
+    font-size: 17px;
+    font-family: 'Times New Roman', Times, serif;
+}
