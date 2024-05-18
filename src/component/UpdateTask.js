@@ -72,18 +72,20 @@ const MyVerticalCenteredModal = () => {
 
     switch (name) {
       case "firstName":
+        const nameRegex = /^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/;
         setName(value);
-        if (!value.trim()) {
-          setFormErrors((prevErrors) => ({
-            ...prevErrors,
-            name: "Please enter your first name.",
-          }));
-        } else {
-          setFormErrors((prevErrors) => ({
-            ...prevErrors,
-            name: "",
-          }));
-        }
+        setFormErrors((prevErrors) => ({
+          ...prevErrors,
+          name: value.trim()
+            ? nameRegex.test(value)
+              ? ""
+              : "Please enter a valid customer name."
+            : "Please enter your customer name.",
+          invalidName:
+            value.trim() && !nameRegex.test(value)
+              ? "Please enter a valid name without numbers or special characters."
+              : "",
+        }));
         break;
       case "modal":
         setModal(value);
@@ -197,7 +199,7 @@ const MyVerticalCenteredModal = () => {
           millage,
         })
       );
-      navigate("/task-list");
+      navigate("/vehicle-view");
     } catch (error) {
       console.error("Error updating task:", error);
     } finally {
@@ -216,12 +218,12 @@ const MyVerticalCenteredModal = () => {
       <div className="card-container">
         <section className="">
           <div class="header-logo">
-            <img
+            {/* <img
               src="https://www.jotform.com/uploads/ugurg/form_files/Post3.65b1272ac4b291.79834324.png"
               alt="Vehicle Registration Form"
               width="752"
               class="header-logo-top"
-            />
+            /> */}
           </div>
           <div class="header-text httal htvam">
             <h1 id="header_1" class="form-header">

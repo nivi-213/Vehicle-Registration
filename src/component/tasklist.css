@@ -10,7 +10,12 @@ body{
 .scroll-container::-webkit-scrollbar {
     width: 0; 
 }
-
+h1{
+    font-size: 30px;
+    font-family:'Times New Roman', Times, serif;
+    font-weight: 700;
+    font: 1em sans-serif;
+}
 
 thead tr th{
  

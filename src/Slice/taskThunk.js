@@ -45,7 +45,7 @@ export const addTaskToServer = createAsyncThunk(
   }
 );
 
-// PATCH
+// Put
 export const updateTaskInServer = createAsyncThunk(
   "task/updateTaskInServer",
   async (task, { rejectWithValue }) => {

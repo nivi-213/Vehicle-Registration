@@ -5,6 +5,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import TaskList from "./component/TaskList";
 import Home from "./component/Home";
 import MyVerticallyCenteredModal from "./component/UpdateTask";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   return (
@@ -15,11 +16,11 @@ function App() {
     
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/home" element={<AddTask />} />
-            <Route path="/task-list" element={<TaskList />} />
-            <Route path="/list" element={<MyVerticallyCenteredModal />} />
+            <Route path="/vehicle-registration" element={<AddTask />} />
+            <Route path="/vehicle-view" element={<TaskList />} />
+            <Route path="/vehicle-update" element={<MyVerticallyCenteredModal />} />
           </Routes>
-       
+          <ToastContainer />
       </BrowserRouter>
     </>
   );

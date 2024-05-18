@@ -29,8 +29,22 @@ const TaskList = () => {
   const dispatch = useDispatch();
   const formRef = useRef(null);
 
+  // useEffect(() => {
+  //   dispatch(getTasksFromServer());
+  // }, [dispatch]);
   useEffect(() => {
-    dispatch(getTasksFromServer());
+    // Fetch data from the server
+    const fetchData = async () => {
+      try {
+        await dispatch(getTasksFromServer());
+        setLoading(false); // Set loading to false after fetching data
+      } catch (error) {
+        console.error("Error fetching tasks:", error);
+        setLoading(false); // Ensure loading is set to false even if an error occurs
+      }
+    };
+
+    fetchData();
   }, [dispatch]);
 
   const updateTask = async (task) => {
@@ -38,7 +52,7 @@ const TaskList = () => {
     try {
       await dispatch(setSelectedTask(task));
       await dispatch(getTasksFromServer());
-      navigate("/list");
+      navigate("/vehicle-update");
     } catch (error) {
       console.error("Error updating task:", error);
     } finally {
@@ -124,28 +138,6 @@ const TaskList = () => {
     });
   };
 
-  const exportExcel = () => {
-    import("xlsx").then((xlsx) => {
-      const selectedData = tasksList.filter((task) =>
-        selectedRows.includes(task)
-      );
-      const worksheet = xlsx.utils.json_to_sheet(selectedData);
-      const workbook = { Sheets: { data: worksheet }, SheetNames: ["data"] };
-      const excelBuffer = xlsx.write(workbook, {
-        bookType: "xlsx",
-        type: "array",
-      });
-
-      saveAsExcelFile(excelBuffer, "tasks");
-    });
-  };
-
-  const saveAsExcelFile = (buffer, fileName) => {
-    saveAs(
-      new Blob([buffer], { type: "application/octet-stream" }),
-      fileName + ".xlsx"
-    );
-  };
 
   const leftToolbarTemplate = () => {
     return (
@@ -155,7 +147,7 @@ const TaskList = () => {
           icon="pi pi-plus"
           className="ms-4 rounded"
           severity="success"
-          onClick={() => navigate("/home")}
+          onClick={() => navigate("/vehicle-registration")}
         />
       </div>
     );
@@ -164,21 +156,8 @@ const TaskList = () => {
   const rightToolbarTemplate = () => {
     return (
       <div>
-        <Button
-          type="button"
-          icon="pi pi-file"
-          className="rounded-pill"
-          onClick={exportExcel}
-          data-pr-tooltip="CSV"
-        />
-        <Button
-          type="button"
-          icon="pi pi-file-excel"
-          severity="success"
-          className="ms-2 rounded-pill"
-          onClick={exportExcel}
-          data-pr-tooltip="XLS"
-        />
+    
+     
         <Button
           type="button"
           icon="pi pi-file-pdf"
@@ -196,8 +175,13 @@ const TaskList = () => {
   };
   const handleClear = () => {
     setSearchText("");
+    handleReset();
   };
-  
+  const handleReset = () => {
+    if (formRef.current) {
+      formRef.current.reset();
+    }
+  };
 
   const filteredTasks = tasksList.filter((task) =>
     Object.values(task).some(
@@ -206,6 +190,8 @@ const TaskList = () => {
         value.toLowerCase().includes(searchText.toLowerCase())
     )
   );
+
+  <div></div>;
 
   return (
     <>
@@ -226,6 +212,7 @@ const TaskList = () => {
                 {loading && <ModalSpinner />}
 
                 <div className="d-flex justify-content-center">
+                <h1>Vehicle View</h1>
                   <div className="ms-auto">
                     <Button
                       className="button me-3 rounded"
