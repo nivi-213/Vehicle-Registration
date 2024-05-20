@@ -22,16 +22,14 @@ body{
   font-size: 1rem;
   line-height: 1.5;
   color: #e3e5e6;
-  background-color: #fff;
+  background-color: #dad6d6;
   background-clip: padding-box;
   border: 1px solid #ced4da;
   border-radius: 0.25rem;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-  font-family: 'Times New Roman', Times, serif;
-  font-weight: 700;
-
-
+  font-family: 'Arial', sans-serif;
 }
+
 h1{
   font-family: 'Times New Roman', Times, serif;
   font-size: 20px;

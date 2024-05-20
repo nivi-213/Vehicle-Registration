@@ -20,7 +20,7 @@ import ModalSpinner from "../Spinner/Spinner";
 
 const TaskList = () => {
   const { tasksList } = useSelector((state) => state.tasks);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [taskToDelete, setTaskToDelete] = useState(null);
   const [searchText, setSearchText] = useState("");
@@ -37,7 +37,7 @@ const TaskList = () => {
     const fetchData = async () => {
       try {
         await dispatch(getTasksFromServer());
-        setLoading(false); // Set loading to false after fetching data
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching tasks:", error);
         setLoading(false); // Ensure loading is set to false even if an error occurs
@@ -195,6 +195,7 @@ const TaskList = () => {
 
   return (
     <>
+        {loading && <ModalSpinner />}
       <div className="scroll-container ">
         <div className="d-flex justify-content-center">
           <div className="col-md-10 mb-5 card p-3 mt-3 shadow">
@@ -209,7 +210,7 @@ const TaskList = () => {
           <div className="col-md-10 card p-3  shadow mb-5">
             <div className="d-flex p-toolbar">
               <div className="table-responsive">
-                {loading && <ModalSpinner />}
+              
 
                 <div className="d-flex justify-content-center">
                 <h1>Vehicle View</h1>
@@ -317,17 +318,20 @@ const TaskList = () => {
                 </DataTable>
 
                 {/* Delete confirmation modal */}
-                <Dialog visible={showDeleteModal} onHide={handleCloseModal}>
-                  <div>Are you sure you want to delete this task?</div>
+                <Dialog className="rounded w-25" visible={showDeleteModal} onHide={handleCloseModal}>
+          
+                  <div >Are you sure you want to delete this task?</div>
                   <div className="p-d-flex p-jc-between mt-3 ms-5">
-                    <Button label="Cancel" onClick={handleCloseModal} />
+                    <Button className="rounded"  label="Cancel" onClick={handleCloseModal} />
                     <Button
                       label="Delete"
                       onClick={handleDelete}
-                      className="p-button-danger ms-2"
+                      className="p-button-danger rounded ms-2"
                     />
                   </div>
+                  
                 </Dialog>
+                
               </div>
             </div>
           </div>
